@@ -22,7 +22,8 @@ public class GettingStartedApplication {
     }
 
     @GetMapping("/")
-    public String index() {
+    public String index(Map<String, Object> model) {
+        model.put("message", "This is a test");
         return "index";
     }
 
