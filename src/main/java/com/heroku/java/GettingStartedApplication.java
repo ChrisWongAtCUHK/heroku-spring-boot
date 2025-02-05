@@ -27,6 +27,20 @@ public class GettingStartedApplication {
         return "index";
     }
 
+    @GetMapping("/hello")
+    public String hello(Map<String, Object> model, String input) {
+        // http://localhost:5000/hello?input=testspringboot
+        try {
+            if(input == null) {
+                input = "N/A";
+            }
+            model.put("message", input);
+        } catch(Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return "index";
+    }
+
     @GetMapping("/database")
     String database(Map<String, Object> model) {
         try (Connection connection = dataSource.getConnection()) {
