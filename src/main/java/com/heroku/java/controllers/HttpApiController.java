@@ -13,6 +13,7 @@ import java.net.http.HttpResponse;
 public class HttpApiController {
     @GetMapping("/api/http/get")
     public String httpget() {
+        String responseString = "";
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
             .uri(URI.create("https://jsonplaceholder.typicode.com/todos/1"))
@@ -21,7 +22,7 @@ public class HttpApiController {
         HttpResponse<String> response;
         try {
             response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            String responseString = response.body();
+            responseString = response.body();
             return responseString;
         } catch (IOException e) {
             
@@ -29,6 +30,6 @@ public class HttpApiController {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        return "";
+        return responseString;
     }
 }
