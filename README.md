@@ -49,4 +49,4 @@ For more information about using Java on Heroku, see these Dev Center articles:
 ## References
 - [Spring Boot Debugging: The Ultimate Guide with VS Code](https://www.youtube.com/watch?v=zJlEcgIVNP4)
 
-[How to Set Up a MySQL Database in Java Spring Boot](https://www.twilio.com/en-us/blog/beginner-mysql-database-java-spring-boot)
+- [How to Set Up a MySQL Database in Java Spring Boot](https://www.twilio.com/en-us/blog/beginner-mysql-database-java-spring-boot)
