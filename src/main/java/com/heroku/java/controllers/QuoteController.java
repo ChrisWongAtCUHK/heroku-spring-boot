@@ -40,7 +40,7 @@ public class QuoteController {
 
     @PostMapping("/quotes/{quoteId}")
     public Quote updateQuote(@PathVariable("quoteId") Long id, @RequestBody String quote) {
-        Quote q = quoteRepository.getById(id);
+        Quote q = quoteRepository.getReferenceById(id);
         q.setQuote(quote);
         return quoteRepository.save(q);
     }
