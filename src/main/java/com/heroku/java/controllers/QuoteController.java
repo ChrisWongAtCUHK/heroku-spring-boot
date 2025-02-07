@@ -38,6 +38,13 @@ public class QuoteController {
         return quoteRepository.save(q);
     }
 
+    @PostMapping("/quotes/{quoteId}")
+    public Quote updateQuote(@PathVariable("quoteId") Long id, @RequestBody String quote) {
+        Quote q = quoteRepository.getById(id);
+        q.setQuote(quote);
+        return quoteRepository.save(q);
+    }
+
     @RequestMapping(value = "/quotes/{quoteId}", method = RequestMethod.DELETE)
     public void deleteQuote(@PathVariable(value = "quoteId") Long id) {
         quoteRepository.deleteById(id);
