@@ -30,5 +30,7 @@ public class Customer {
         this.name = name;
     }
 
-
+    public Customer getCustomer() {
+        return this;
+    }
 }
