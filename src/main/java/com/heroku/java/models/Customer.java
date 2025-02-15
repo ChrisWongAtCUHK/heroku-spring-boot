@@ -26,11 +26,7 @@ public class Customer {
         return this.name;
     }
 
-    public void setCustomer(String name) {
+    public void setName(String name) {
         this.name = name;
-    }
-
-    public Customer getCustomer() {
-        return this;
     }
 }

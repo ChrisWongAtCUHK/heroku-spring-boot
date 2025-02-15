@@ -4,6 +4,7 @@ import com.heroku.java.models.Customer;
 import com.heroku.java.repositories.CustomerRepository;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,17 +23,18 @@ public class CustomerController {
 
     private final CustomerRepository customerRepository;
 
-    @GetMapping("/api/customers")
-    public List<Customer> getCustomers(@RequestParam("search") Optional<String> searchParam) {
-        return searchParam
+    @RequestMapping(value = "/api/customers", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody List<Customer> getCustomers(@RequestParam("search") Optional<String> searchParam) {
+        List<Customer> customers = searchParam
                 .map(customerRepository::getContainingCustomer)
                 .orElse(customerRepository.findAll());
+
+        return customers;
     }
 
     @GetMapping("/api/customers/{id}")
     public ResponseEntity<Object> readCustomer(@PathVariable("id") Long id) {
-        Optional<Customer> c = customerRepository.findById(id).map(Customer::getCustomer);
-        Customer customer = c.get();
+        Customer customer = customerRepository.getReferenceById(id);
         Map<String, String> data = new HashMap<>();
         data.put("id", id.toString());
         data.put("name", customer.getName());
@@ -43,14 +45,14 @@ public class CustomerController {
     @PostMapping("/api/customers")
     public Customer addCustomer(@RequestBody String name) {
         Customer customer = new Customer();
-        customer.setCustomer(name);
+        customer.setName(name);
         return customerRepository.save(customer);
     }
 
     @PutMapping("/api/customers/{id}")
     public Customer updateCustomer(@PathVariable("id") Long id, @RequestBody String name) {
         Customer customer = customerRepository.getReferenceById(id);
-        customer.setCustomer(name);
+        customer.setName(name);
         return customerRepository.save(customer);
     }
 
