@@ -24,8 +24,8 @@ public class CustomerController {
     private final CustomerRepository customerRepository;
 
     @RequestMapping(value = "/api/customers", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody List<Customer> getCustomers(@RequestParam("search") Optional<String> searchParam) {
-        List<Customer> customers = searchParam
+    public @ResponseBody List<Customer> getCustomers(@RequestParam("name") Optional<String> searchName) {
+        List<Customer> customers = searchName
                 .map(customerRepository::getContainingCustomer)
                 .orElse(customerRepository.findAll());
 
