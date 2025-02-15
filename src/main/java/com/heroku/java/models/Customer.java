@@ -22,7 +22,7 @@ public class Customer {
     }
 
 
-    public String getCustomer() {
+    public String getName() {
         return this.name;
     }
 

@@ -27,7 +27,7 @@ public class CustomerController {
 
     @GetMapping("/api/customers/{id}")
     public ResponseEntity<String> readCustomer(@PathVariable("id") Long id) {
-        return ResponseEntity.of(customerRepository.findById(id).map(Customer::getCustomer));
+        return ResponseEntity.of(customerRepository.findById(id).map(Customer::getName));
     }
 
     @PostMapping("/api/customers")
