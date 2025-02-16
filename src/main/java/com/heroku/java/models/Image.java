@@ -1,6 +1,6 @@
 package com.heroku.java.models;
 
-import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.UuidGenerator;
 
 import jakarta.persistence.*;
 
@@ -9,8 +9,7 @@ import jakarta.persistence.*;
 public class Image {
 
 	@Id
-	@GeneratedValue(generator = "uuid")
-  @GenericGenerator(name = "uuid", strategy = "uuid2")
+	@UuidGenerator
 	private String id;
 
 	private String name;
