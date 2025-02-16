@@ -54,7 +54,7 @@ public class FileApiController {
 	}
 
 	@PostMapping("/api/files")
-	public Map<String, String> handleFileUpload(@RequestParam("file") MultipartFile file) {
+	public Map<String, String> uploadFile(@RequestParam("file") MultipartFile file) {
 		storageService.store(file);
 		Map<String, String> data = new HashMap<>();
 		data.put("message", "You successfully uploaded " + file.getOriginalFilename() + "!");
