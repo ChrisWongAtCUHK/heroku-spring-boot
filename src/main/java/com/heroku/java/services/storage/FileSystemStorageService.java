@@ -101,4 +101,25 @@ public class FileSystemStorageService implements StorageService {
 			throw new StorageException("Could not initialize storage", e);
 		}
 	}
+
+	@Override
+	public void delete(String filename) {
+		try {
+			Path file = load(filename);
+			Resource resource = new UrlResource(file.toUri());
+			if (resource.exists() || resource.isReadable()) {
+				FileSystemUtils.deleteRecursively(file);
+			} else {
+				throw new StorageFileNotFoundException(
+						"Could not read file: " + filename);
+
+			}
+		} catch (MalformedURLException e) {
+			throw new StorageFileNotFoundException("Could not read file: " + filename, e);
+		} catch (IOException e) {
+			throw new StorageFileNotFoundException(
+				"Could not read file: " + filename);
+
+		}
+	}
 }

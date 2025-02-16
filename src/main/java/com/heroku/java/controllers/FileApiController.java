@@ -5,6 +5,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -58,6 +59,16 @@ public class FileApiController {
 		storageService.store(file);
 		Map<String, String> data = new HashMap<>();
 		data.put("message", "You successfully uploaded " + file.getOriginalFilename() + "!");
+
+		return data;
+	}
+
+	@DeleteMapping("/api/files/{filename:.+}")
+	public Map<String, String> deleteFile(@PathVariable String filename) {
+		storageService.delete(filename);
+
+		Map<String, String> data = new HashMap<>();
+		data.put("message", "You successfully deleted " + filename + "!");
 
 		return data;
 	}
