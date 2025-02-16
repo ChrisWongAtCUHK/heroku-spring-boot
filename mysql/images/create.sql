@@ -1,0 +1,6 @@
+CREATE TABLE images ( 
+	id VARCHAR(36) PRIMARY KEY,
+	name VARCHAR(50) NOT NULL, 
+	type VARCHAR(50) NOT NULL, 
+	data BLOB NOT NULL
+) Engine = InnoDB;

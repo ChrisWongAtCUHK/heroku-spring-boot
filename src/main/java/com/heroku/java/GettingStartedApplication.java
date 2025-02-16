@@ -3,6 +3,7 @@ package com.heroku.java;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -15,6 +16,7 @@ import com.heroku.java.services.storage.StorageService;
 import java.util.Map;
 
 @SpringBootApplication
+@EntityScan(basePackages = {"com.heroku.java.models"}) 
 @EnableJpaRepositories(basePackages = {"com.heroku.java.repositories"})
 @Controller
 @EnableConfigurationProperties(StorageProperties.class)
