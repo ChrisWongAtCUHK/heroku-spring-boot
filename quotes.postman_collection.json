@@ -1,0 +1,135 @@
+{
+	"info": {
+		"_postman_id": "338aae8d-666f-4458-b04d-b04851c2605e",
+		"name": "quotes",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20575236"
+	},
+	"item": [
+		{
+			"name": "getQuotes",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/quotes",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"quotes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "readQuote",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/quotes/6",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"quotes",
+						"6"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addQuote",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "testing quote",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/quotes",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"quotes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateQuote",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "updated quote",
+					"options": {
+						"raw": {
+							"language": "text"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/quotes/8",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"quotes",
+						"8"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteQuote",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "updated quote",
+					"options": {
+						"raw": {
+							"language": "text"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/quotes/8",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"quotes",
+						"8"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
