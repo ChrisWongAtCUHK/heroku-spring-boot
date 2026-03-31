@@ -53,12 +53,6 @@
             <artifactId>hibernate-jpa-2.1-api</artifactId>
             <version>1.0.0.Final</version>
         </dependency>
-        <dependency>
-            <groupId>org.mariadb.jdbc</groupId>
-            <artifactId>mariadb-java-client</artifactId>
-            <version>3.3.3</version> <!-- Check Maven Central for latest -->
-        </dependency>
-
     </dependencies>
 
     <build>
