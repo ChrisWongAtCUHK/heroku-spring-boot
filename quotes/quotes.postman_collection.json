@@ -47,6 +47,33 @@
       "response": []
     },
     {
+      "name": "getQuotes sort",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/quotes?sortBy=quote&sortDirection=asc",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "quotes"
+          ],
+          "query": [
+            {
+              "key": "sortBy",
+              "value": "quote"
+            },
+            {
+              "key": "sortDirection",
+              "value": "asc"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
       "name": "readQuote",
       "request": {
         "method": "GET",
@@ -79,9 +106,9 @@
           }
         },
         "url": {
-          "raw": "{{lbase_url}}/quotes",
+          "raw": "{{base_url}}/quotes",
           "host": [
-            "{{lbase_url}}"
+            "{{base_url}}"
           ],
           "path": [
             "quotes"
