@@ -76,4 +76,4 @@ export AIVEN_SERVER=localhost
 ```
 ## Import quotes/localhost quotes.postman_collection.json in Postman
 ## Set Postman variable
-http://localhost:5000
+Set localhost_url to `http://localhost:5000`
