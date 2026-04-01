@@ -1,7 +1,7 @@
 {
   "info": {
-    "_postman_id": "8f251e03-9d5b-4aaa-885f-d38a4bac5bb4",
-    "name": "localhost quotes",
+    "_postman_id": "edce8bce-ea75-482f-8cd3-a26f8b607bc0",
+    "name": "quotes",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "_exporter_id": "20575236"
   },
@@ -12,12 +12,35 @@
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "{{localhost_url}}/quotes",
+          "raw": "{{base_url}}/quotes",
           "host": [
-            "{{localhost_url}}"
+            "{{base_url}}"
           ],
           "path": [
             "quotes"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "getQuotes search",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/quotes?search=who",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "quotes"
+          ],
+          "query": [
+            {
+              "key": "search",
+              "value": "who"
+            }
           ]
         }
       },
@@ -29,9 +52,9 @@
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "{{localhost_url}}/quotes/6",
+          "raw": "{{base_url}}/quotes/6",
           "host": [
-            "{{localhost_url}}"
+            "{{base_url}}"
           ],
           "path": [
             "quotes",
@@ -56,9 +79,9 @@
           }
         },
         "url": {
-          "raw": "{{localhost_url}}/quotes",
+          "raw": "{{lbase_url}}/quotes",
           "host": [
-            "{{localhost_url}}"
+            "{{lbase_url}}"
           ],
           "path": [
             "quotes"
@@ -82,9 +105,9 @@
           }
         },
         "url": {
-          "raw": "{{localhost_url}}/quotes/8",
+          "raw": "{{base_url}}/quotes/8",
           "host": [
-            "{{localhost_url}}"
+            "{{base_url}}"
           ],
           "path": [
             "quotes",
@@ -109,9 +132,9 @@
           }
         },
         "url": {
-          "raw": "{{localhost_url}}/quotes/8",
+          "raw": "{{base_url}}/quotes/8",
           "host": [
-            "{{localhost_url}}"
+            "{{base_url}}"
           ],
           "path": [
             "quotes",
@@ -122,9 +145,33 @@
       "response": []
     }
   ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
   "variable": [
     {
-      "key": "localhost_url",
+      "key": "base_url",
       "value": ""
     }
   ]
