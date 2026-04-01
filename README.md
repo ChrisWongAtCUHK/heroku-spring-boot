@@ -69,7 +69,11 @@ heroku config:set AIVEN_PORT=${AIVEN_PORT}
 ```
 
 # Run with localhost docker MySQL server
+## Run in terminal
 ```
 export AIVEN_SERVER=localhost
 ./mvnw spring-boot:run
 ```
+## Import quotes/localhost quotes.postman_collection.json in Postman
+## Set Postman variable
+http://localhost:5000

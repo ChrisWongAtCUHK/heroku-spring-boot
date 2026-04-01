@@ -19,4 +19,4 @@ VALUES
     'What did I most take for granted before this time that I want to more fully appreciate moving forward?'
   );
 
--- ALTER TABLE quotes AUTO_INCREMENT = 8
+-- ALTER TABLE quotes AUTO_INCREMENT = 1
