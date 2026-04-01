@@ -74,6 +74,37 @@
       "response": []
     },
     {
+      "name": "getQuotes search sort",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/quotes?search=who&sortBy=quote&sortDirection=desc",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "quotes"
+          ],
+          "query": [
+            {
+              "key": "search",
+              "value": "who"
+            },
+            {
+              "key": "sortBy",
+              "value": "quote"
+            },
+            {
+              "key": "sortDirection",
+              "value": "desc"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
       "name": "readQuote",
       "request": {
         "method": "GET",
@@ -168,6 +199,14 @@
             "8"
           ]
         }
+      },
+      "response": []
+    },
+    {
+      "name": "New Request",
+      "request": {
+        "method": "GET",
+        "header": []
       },
       "response": []
     }
