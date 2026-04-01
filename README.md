@@ -52,3 +52,18 @@ For more information about using Java on Heroku, see these Dev Center articles:
 - [How to Set Up a MySQL Database in Java Spring Boot](https://www.twilio.com/en-us/blog/beginner-mysql-database-java-spring-boot)
  
 # [Uploading Files](https://spring.io/guides/gs/uploading-files)
+
+# Deploy on Heroku with Aiven
+```
+heroku create heroku-spring-boot
+git push heroku main
+```
+```
+heroku config
+
+heroku config:set AIVEN_SERVER=${AIVEN_SERVER}
+heroku config:set AIVEN_UID=${AIVEN_UID}
+heroku config:set AIVEN_PWD=${AIVEN_PWD}
+heroku config:set AIVEN_DATABASE=${AIVEN_DATABASE}
+heroku config:set AIVEN_PORT=${AIVEN_PORT}
+```
