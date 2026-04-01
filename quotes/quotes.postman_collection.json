@@ -74,7 +74,7 @@
       "response": []
     },
     {
-      "name": "getQuotes search sort",
+      "name": "getQuotes search sort 1",
       "request": {
         "method": "GET",
         "header": [],
@@ -98,6 +98,29 @@
             {
               "key": "sortDirection",
               "value": "desc"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "getQuotes search sort 2",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/quotes?sortBy=abc",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "quotes"
+          ],
+          "query": [
+            {
+              "key": "sortBy",
+              "value": "abc"
             }
           ]
         }
@@ -199,14 +222,6 @@
             "8"
           ]
         }
-      },
-      "response": []
-    },
-    {
-      "name": "New Request",
-      "request": {
-        "method": "GET",
-        "header": []
       },
       "response": []
     }

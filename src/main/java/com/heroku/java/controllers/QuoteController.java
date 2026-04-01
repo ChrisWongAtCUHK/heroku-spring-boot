@@ -7,6 +7,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,10 +23,27 @@ public class QuoteController {
 
     @GetMapping("/quotes")
     public List<Quote> getQuotes(@RequestParam("search") Optional<String> searchParam, Optional<String> sortBy, Optional<String> sortDirection) {
+        // validate sortBy if Quote has it
+        Field[] fields = Quote.class.getDeclaredFields();
+        boolean validSortBy = false;
+        for (Field field : fields) {
+            if(sortBy.orElse("id").toLowerCase().equals(field.getName().toLowerCase())) {
+                // if sortBy is valid
+                validSortBy = true;
+            }
+        }
+
         // Pass the entity property name (not the DB column name)
         Sort sort = Sort.by(sortBy.orElse("id"));
+        if(!validSortBy) {
+            // if sortBy is invalid
+            sort = Sort.by("id");
+        }
+
         // by default, ascending order
-        sort = sortDirection.orElse("desc").equals("desc") ? sort.descending() : sort.ascending() ;
+        sort = sortDirection.orElse("asc").equals("asc") ? 
+            sort.ascending() :  sortDirection.orElse("desc").equals("desc") ? sort.descending() : sort.ascending();
+            
         List<Quote> quotes = quoteRepository.getContainingQuote(searchParam.orElse("%"), sort);
         
         return quotes;
