@@ -11,5 +11,5 @@ docker build \
 ```
 docker run \
   -v mysql_data:/var/lib/mysql \
-  -d -p 3306:3306 mysql-server
+  -d -p 18211:3306 mysql-server
 ```
