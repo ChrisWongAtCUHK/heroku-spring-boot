@@ -6,6 +6,11 @@ import com.heroku.java.repositories.QuoteRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -20,10 +25,16 @@ public class QuoteController {
     private final QuoteRepository quoteRepository;
 
     @GetMapping("/quotes")
-    public List<Quote> getQuotes(@RequestParam("search") Optional<String> searchParam) {
-        return searchParam
-                .map(quoteRepository::getContainingQuote)
-                .orElse(quoteRepository.findAll());
+    public List<Quote> getQuotes(@RequestParam("search") Optional<String> searchParam, Optional<String> sortBy, Optional<String> sortDirection) {
+        // List<Quote> quotes = searchParam
+        //         .map(quoteRepository::getContainingQuote)
+        //         .orElse(quoteRepository.findAll());
+        Sort sort = Sort.by(Sort.Direction.fromString(sortDirection.orElse("asc")), sortBy.orElse("id"));
+        Pageable pageable = PageRequest.of(0, 10, sort);
+
+        Page<Quote> quotes =  quoteRepository.findAll(pageable);
+        
+        return quotes.getContent();
     }
 
     @GetMapping("/quotes/{quoteId}")

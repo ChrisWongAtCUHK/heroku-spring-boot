@@ -77,3 +77,5 @@ export AIVEN_SERVER=localhost
 ## Import quotes/localhost quotes.postman_collection.json in Postman
 ## Set Postman variable
 Set localhost_url to `http://localhost:5000`
+
+## [Spring Data JPA Paging and Sorting example](https://mkyong.com/spring-boot/spring-data-jpa-paging-and-sorting-example/)
