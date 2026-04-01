@@ -67,3 +67,9 @@ heroku config:set AIVEN_PWD=${AIVEN_PWD}
 heroku config:set AIVEN_DATABASE=${AIVEN_DATABASE}
 heroku config:set AIVEN_PORT=${AIVEN_PORT}
 ```
+
+# Run with localhost docker MySQL server
+```
+export AIVEN_SERVER=localhost
+./mvnw spring-boot:run
+```
