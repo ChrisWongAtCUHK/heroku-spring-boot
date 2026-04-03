@@ -13,6 +13,7 @@ import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ScanOptions;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -143,5 +144,23 @@ public class RedisController {
       throw new RuntimeException("Error scanning Redis keys", e);
     }
     return users;
+  }
+
+  /**
+   * Delete an user by key
+   */
+  @DeleteMapping("/redis/users/{key}")
+  public String deleteUserByKey(@PathVariable("key") String key) {
+    // RedisConnection must be closed manually if obtained from the factory
+    try (RedisConnection connection = redisTemplate.getConnectionFactory().getConnection()) {
+      boolean deleted = redisTemplate.opsForValue().getOperations().delete(key);
+      if(!deleted) {
+        return "Key: " + key + " does not exist.";
+      }
+    } catch (Exception e) {
+      throw new RuntimeException("Error scanning Redis keys", e);
+    }
+
+    return "Key: " + key + " is deleted.";
   }
 }
