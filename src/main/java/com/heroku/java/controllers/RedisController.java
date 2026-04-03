@@ -1,8 +1,10 @@
 package com.heroku.java.controllers;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -73,20 +75,20 @@ public class RedisController {
     try (RedisConnection connection = redisTemplate.getConnectionFactory().getConnection()) {
       Object obj = redisTemplate.opsForValue().get(key);
       User user = new User();
-      if(obj == null) {
+      if (obj == null) {
         // not found by key
         return user;
       }
 
-      if(obj instanceof LinkedHashMap<?, ?>){
-        LinkedHashMap<?, ?> linkedHashMap = (LinkedHashMap<?, ?>)obj;
+      if (obj instanceof LinkedHashMap<?, ?>) {
+        LinkedHashMap<?, ?> linkedHashMap = (LinkedHashMap<?, ?>) obj;
         linkedHashMap.forEach((k, value) -> {
-          switch((String)k) {
+          switch ((String) k) {
             case "name":
-              user.setName((String)value);
+              user.setName((String) value);
               break;
             case "age":
-              user.setAge((int)value);
+              user.setAge((int) value);
               break;
             default:
               break;
@@ -101,8 +103,8 @@ public class RedisController {
   }
 
   @GetMapping("/redis/users")
-  public Map<String, User> getUsers() {
-    Map<String, User> users = new HashMap<>();
+  public List<User> getAllUsers() {
+    List<User> users = new ArrayList<>();
     ScanOptions scanOptions = ScanOptions.scanOptions().match("*").count(100).build();
 
     // RedisConnection must be closed manually if obtained from the factory
@@ -113,9 +115,29 @@ public class RedisController {
       Cursor<byte[]> cursor = connection.keyCommands().scan(scanOptions);
       while (cursor.hasNext()) {
         String key = new String(cursor.next());
-        User user = (User) redisTemplate.opsForValue().get(key);
+        Object obj = redisTemplate.opsForValue().get(key);
+        User user = new User();
+        if (obj == null) {
+          // not found by key
+        } else {
+          if (obj instanceof LinkedHashMap<?, ?>) {
+            LinkedHashMap<?, ?> linkedHashMap = (LinkedHashMap<?, ?>) obj;
+            linkedHashMap.forEach((k, value) -> {
+              switch ((String) k) {
+                case "name":
+                  user.setName((String) value);
+                  break;
+                case "age":
+                  user.setAge((int) value);
+                  break;
+                default:
+                  break;
+              }
+            });
+          }
 
-        users.put(key, user);
+          users.add(user);
+        }
       }
     } catch (Exception e) {
       throw new RuntimeException("Error scanning Redis keys", e);

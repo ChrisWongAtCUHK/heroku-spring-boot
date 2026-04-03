@@ -7,7 +7,7 @@
   },
   "item": [
     {
-      "name": "saveUser",
+      "name": "saveUser1",
       "protocolProfileBehavior": {
         "disabledSystemHeaders": {
           "content-type": true
@@ -74,6 +74,78 @@
             "redis",
             "users",
             "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "saveUser2",
+      "protocolProfileBehavior": {
+        "disabledSystemHeaders": {
+          "content-type": true
+        }
+      },
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"name\": \"User 2\",\n    \"age\": 19\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/redis/users/2",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "redis",
+            "users",
+            "2"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "getAllUsers",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true,
+        "disabledSystemHeaders": {
+          "content-type": true
+        }
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/redis/users",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "redis",
+            "users"
           ]
         }
       },
