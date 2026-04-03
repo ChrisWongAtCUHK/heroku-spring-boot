@@ -50,8 +50,11 @@ public class RedisController {
     return keys;
   }
 
+  /** 
+   * Save or update an user
+  */
   @PostMapping("/redis/users/{key}")
-  public User addUser(@PathVariable("key") String key, @RequestBody User user) {
+  public User saveUser(@PathVariable("key") String key, @RequestBody User user) {
     // RedisConnection must be closed manually if obtained from the factory
     try (RedisConnection connection = redisTemplate.getConnectionFactory().getConnection()) {
       redisTemplate.opsForValue().set(key, user);

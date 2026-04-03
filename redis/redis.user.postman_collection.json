@@ -7,7 +7,7 @@
   },
   "item": [
     {
-      "name": "addUser",
+      "name": "saveUser",
       "protocolProfileBehavior": {
         "disabledSystemHeaders": {
           "content-type": true
