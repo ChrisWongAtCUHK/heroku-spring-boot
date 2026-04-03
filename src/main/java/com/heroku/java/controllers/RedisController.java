@@ -11,7 +11,12 @@ import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ScanOptions;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.heroku.java.models.User;
 
 @RestController
 public class RedisController {
@@ -45,9 +50,22 @@ public class RedisController {
     return keys;
   }
 
-  @GetMapping("/redis/keyValues")
-  public Map<String, Object> keyValues() {
-    Map<String, Object> keyValues = new HashMap<>();
+  @PostMapping("/redis/users/{key}")
+  public User addUser(@PathVariable("key") String key, @RequestBody User user) {
+    // RedisConnection must be closed manually if obtained from the factory
+    try (RedisConnection connection = redisTemplate.getConnectionFactory().getConnection()) {
+      redisTemplate.opsForValue().set(key, user);
+      
+    } catch (Exception e) {
+      throw new RuntimeException("Error scanning Redis keys", e);
+    }
+
+    return user;
+  }
+
+  @GetMapping("/redis/users")
+  public Map<String, User> getUsers() {
+    Map<String, User> users = new HashMap<>();
     ScanOptions scanOptions = ScanOptions.scanOptions().match("*").count(100).build();
 
     // RedisConnection must be closed manually if obtained from the factory
@@ -58,12 +76,13 @@ public class RedisController {
       Cursor<byte[]> cursor = connection.keyCommands().scan(scanOptions);
       while (cursor.hasNext()) {
         String key = new String(cursor.next());
-        Object value = redisTemplate.opsForValue().get(key);
-        keyValues.put(key, value);
+        User user = (User) redisTemplate.opsForValue().get(key);
+
+        users.put(key, user);
       }
     } catch (Exception e) {
       throw new RuntimeException("Error scanning Redis keys", e);
     }
-    return keyValues;
+    return users;
   }
 }

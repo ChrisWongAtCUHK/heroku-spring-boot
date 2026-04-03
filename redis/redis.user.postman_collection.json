@@ -1,0 +1,49 @@
+{
+  "info": {
+    "_postman_id": "6700a3e0-2aa1-41c6-9758-e3359ff22145",
+    "name": "redis.user",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "20575236"
+  },
+  "item": [
+    {
+      "name": "addUser",
+      "protocolProfileBehavior": {
+        "disabledSystemHeaders": {
+          "content-type": true
+        }
+      },
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"name\": \"User 1\",\n    \"age\": 18\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/redis/users/1",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "redis",
+            "users",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

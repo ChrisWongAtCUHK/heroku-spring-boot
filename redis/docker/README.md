@@ -28,4 +28,5 @@ docker exec -it redis redis-cli --raw
 2. Set json
 ```
 127.0.0.1:6379> SET user:1 '{"name":"John", "age":30}'
+127.0.0.1:6379> SET user:2 '{"name":"張三", "age":19}'
 ```
