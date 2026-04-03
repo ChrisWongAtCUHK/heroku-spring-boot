@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import com.heroku.java.services.storage.StorageProperties;
 import com.heroku.java.services.storage.StorageService;
+import com.redis.om.spring.annotations.EnableRedisDocumentRepositories;
 
 import java.util.Map;
 
@@ -20,6 +21,7 @@ import java.util.Map;
 @EnableJpaRepositories(basePackages = {"com.heroku.java.repositories"})
 @Controller
 @EnableConfigurationProperties(StorageProperties.class)
+@EnableRedisDocumentRepositories
 public class GettingStartedApplication {
     @GetMapping("/")
     public String index(Map<String, Object> model) {

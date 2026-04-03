@@ -1,0 +1,43 @@
+{
+  "info": {
+    "_postman_id": "04326af7-f1e1-49f6-a3cb-8d7e03346544",
+    "name": "redis.sample_restaurant",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "20575236"
+  },
+  "item": [
+    {
+      "name": "getAllRestaurants",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true,
+        "disabledSystemHeaders": {
+          "content-type": true
+        }
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/redis/restaurants",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "redis",
+            "restaurants"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
