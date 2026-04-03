@@ -44,6 +44,40 @@
         }
       },
       "response": []
+    },
+    {
+      "name": "getUserByKey",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true,
+        "disabledSystemHeaders": {
+          "content-type": true
+        }
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/redis/users/1",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "redis",
+            "users",
+            "1"
+          ]
+        }
+      },
+      "response": []
     }
   ]
 }

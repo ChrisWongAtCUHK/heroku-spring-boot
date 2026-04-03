@@ -2,6 +2,7 @@ package com.heroku.java.controllers;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -50,20 +51,53 @@ public class RedisController {
     return keys;
   }
 
-  /** 
+  /**
    * Save or update an user
-  */
+   */
   @PostMapping("/redis/users/{key}")
   public User saveUser(@PathVariable("key") String key, @RequestBody User user) {
     // RedisConnection must be closed manually if obtained from the factory
     try (RedisConnection connection = redisTemplate.getConnectionFactory().getConnection()) {
       redisTemplate.opsForValue().set(key, user);
-      
+
     } catch (Exception e) {
       throw new RuntimeException("Error scanning Redis keys", e);
     }
 
     return user;
+  }
+
+  @GetMapping("/redis/users/{key}")
+  public User getUserByKey(@PathVariable("key") String key) {
+    // RedisConnection must be closed manually if obtained from the factory
+    try (RedisConnection connection = redisTemplate.getConnectionFactory().getConnection()) {
+      Object obj = redisTemplate.opsForValue().get(key);
+      User user = new User();
+      if(obj == null) {
+        // not found by key
+        return user;
+      }
+
+      if(obj instanceof LinkedHashMap<?, ?>){
+        LinkedHashMap<?, ?> linkedHashMap = (LinkedHashMap<?, ?>)obj;
+        linkedHashMap.forEach((k, value) -> {
+          switch((String)k) {
+            case "name":
+              user.setName((String)value);
+              break;
+            case "age":
+              user.setAge((int)value);
+              break;
+            default:
+              break;
+          }
+        });
+      }
+
+      return user;
+    } catch (Exception e) {
+      throw new RuntimeException("Error scanning Redis keys", e);
+    }
   }
 
   @GetMapping("/redis/users")
