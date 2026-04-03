@@ -19,3 +19,13 @@ docker exec -it redis redis-cli --raw
 ```
 127.0.0.1:6379> KEYS *
 ```
+
+## Set JSON
+1. Delete keys of non-json value(eg. string)
+```
+127.0.0.1:6379> del mykey
+```
+2. Set json
+```
+127.0.0.1:6379> SET user:1 '{"name":"John", "age":30}'
+```

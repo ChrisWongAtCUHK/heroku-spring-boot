@@ -46,8 +46,8 @@ public class RedisController {
   }
 
   @GetMapping("/redis/keyValues")
-  public Map<String, String> keyValues() {
-    Map<String, String> keyValues = new HashMap<>();
+  public Map<String, Object> keyValues() {
+    Map<String, Object> keyValues = new HashMap<>();
     ScanOptions scanOptions = ScanOptions.scanOptions().match("*").count(100).build();
 
     // RedisConnection must be closed manually if obtained from the factory
@@ -58,7 +58,7 @@ public class RedisController {
       Cursor<byte[]> cursor = connection.keyCommands().scan(scanOptions);
       while (cursor.hasNext()) {
         String key = new String(cursor.next());
-        String value = redisTemplate.opsForValue().get(key).toString();
+        Object value = redisTemplate.opsForValue().get(key);
         keyValues.put(key, value);
       }
     } catch (Exception e) {
