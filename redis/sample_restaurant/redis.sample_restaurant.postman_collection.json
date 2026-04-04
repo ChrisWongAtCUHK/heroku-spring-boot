@@ -38,6 +38,44 @@
         }
       },
       "response": []
+    },
+    {
+      "name": "saveRestaurant",
+      "protocolProfileBehavior": {
+        "disabledSystemHeaders": {
+          "content-type": true
+        }
+      },
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"name\": \"Lan Fong Yuen\",\n    \"cuisine\": \"Hong Kong\",\n    \"location\": \"-97.6881,30.1887\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/redis/restaurants",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "redis",
+            "restaurants"
+          ]
+        }
+      },
+      "response": []
     }
   ]
 }
