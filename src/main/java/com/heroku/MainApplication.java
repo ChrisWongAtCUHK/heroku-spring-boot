@@ -1,26 +1,15 @@
-package com.heroku.java;
+package com.heroku;
 
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Bean;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-
-import com.heroku.java.services.storage.StorageProperties;
-import com.heroku.java.services.storage.StorageService;
 
 import java.util.Map;
 
 @SpringBootApplication
-@EntityScan(basePackages = {"com.heroku.java.models"}) 
-@EnableJpaRepositories(basePackages = {"com.heroku.java.repositories"})
 @Controller
-@EnableConfigurationProperties(StorageProperties.class)
-public class GettingStartedApplication {
+public class MainApplication {
     @GetMapping("/")
     public String index(Map<String, Object> model) {
         model.put("message", "This is a test");
@@ -42,13 +31,6 @@ public class GettingStartedApplication {
     }
 
     public static void main(String[] args) {
-        SpringApplication.run(GettingStartedApplication.class, args);
+        SpringApplication.run(MainApplication.class, args);
     }
-
-    @Bean
-	CommandLineRunner init(StorageService storageService) {
-		return (args) -> {
-			storageService.init();
-		};
-	}
 }
