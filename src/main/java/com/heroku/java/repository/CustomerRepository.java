@@ -1,9 +1,10 @@
-package com.heroku.java.repositories;
+package com.heroku.java.repository;
 
-import com.heroku.java.models.Customer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+
+import com.heroku.java.model.Customer;
 
 import java.util.List;
 
