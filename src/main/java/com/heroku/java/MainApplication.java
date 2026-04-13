@@ -20,7 +20,7 @@ import java.util.Map;
 @EnableJpaRepositories(basePackages = {"com.heroku.java.repositories"})
 @Controller
 @EnableConfigurationProperties(StorageProperties.class)
-public class GettingStartedApplication {
+public class MainApplication {
     @GetMapping("/")
     public String index(Map<String, Object> model) {
         model.put("message", "This is a test");
@@ -42,7 +42,7 @@ public class GettingStartedApplication {
     }
 
     public static void main(String[] args) {
-        SpringApplication.run(GettingStartedApplication.class, args);
+        SpringApplication.run(MainApplication.class, args);
     }
 
     @Bean
