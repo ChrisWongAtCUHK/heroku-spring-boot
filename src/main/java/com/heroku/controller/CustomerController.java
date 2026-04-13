@@ -1,7 +1,7 @@
-package com.heroku.java.controller;
+package com.heroku.controller;
 
-import com.heroku.java.model.Customer;
-import com.heroku.java.repository.CustomerRepository;
+import com.heroku.model.Customer;
+import com.heroku.repository.CustomerRepository;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

@@ -1,7 +1,7 @@
-package com.heroku.java.controller;
+package com.heroku.controller;
 
-import com.heroku.java.model.Quote;
-import com.heroku.java.repository.QuoteRepository;
+import com.heroku.model.Quote;
+import com.heroku.repository.QuoteRepository;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

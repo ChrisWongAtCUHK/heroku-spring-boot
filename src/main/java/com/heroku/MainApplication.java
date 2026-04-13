@@ -1,4 +1,4 @@
-package com.heroku.java;
+package com.heroku;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import java.util.Map;
 
 @SpringBootApplication
-@EntityScan(basePackages = {"com.heroku.java.model"}) 
-@EnableJpaRepositories(basePackages = {"com.heroku.java.repository"})
+@EntityScan(basePackages = {"com.heroku.model"}) 
+@EnableJpaRepositories(basePackages = {"com.heroku.repository"})
 @Controller
 public class MainApplication {
     @GetMapping("/")

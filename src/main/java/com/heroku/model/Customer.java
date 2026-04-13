@@ -1,4 +1,4 @@
-package com.heroku.java.model;
+package com.heroku.model;
 
 import jakarta.persistence.*;
 
