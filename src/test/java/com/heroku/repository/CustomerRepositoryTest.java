@@ -10,6 +10,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 
 import com.heroku.model.Customer;
 
@@ -64,5 +67,23 @@ class CustomerRepositoryTest {
 
     // Assert
     assertEquals(2, result.size()); // 應該只有 Allen 和 Alex
+  }
+
+  @Test
+  @DisplayName("分頁測試：應回傳指定頁面的資料並按名稱排序")
+  void findAll_WithPagination_ShouldReturnSortedPage() {
+    // Arrange: 存入多筆資料
+    customerRepository.save(new Customer(null, "C"));
+    customerRepository.save(new Customer(null, "A"));
+    customerRepository.save(new Customer(null, "B"));
+
+    // Act: 請求第 0 頁，每頁 2 筆，按名稱升序排列
+    PageRequest pageRequest = PageRequest.of(0, 2, Sort.by("name").ascending());
+    Page<Customer> page = customerRepository.findAll(pageRequest);
+
+    // Assert
+    assertEquals(2, page.getContent().size());
+    assertEquals("A", page.getContent().get(0).getName());
+    assertEquals("B", page.getContent().get(1).getName());
   }
 }
