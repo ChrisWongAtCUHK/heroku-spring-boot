@@ -41,21 +41,18 @@ public class CustomerService {
     }
 
     public CustomerResponse readCustomer(Long id) {
-        Optional<Customer> customerOpt = repository.findById(id);
-        return customerOpt.map(c -> new CustomerResponse(c.getId(), c.getName()))
+        Optional<Customer> customer = repository.findById(id);
+        return customer.map(c -> new CustomerResponse(c.getId(), c.getName()))
                 .orElseThrow(() -> new CustomerNotFoundException(id));
     }
 
     public CustomerResponse updateCustomer(Long id, String name) {
-        Optional<Customer> customerOpt = repository.findById(id);
-        if (customerOpt.isEmpty()) {
-            throw new IllegalArgumentException("Customer not found");
-        }
+        // 之前可能是 if (customer.isEmpty()) throw new IllegalArgumentException(...)
+        Customer customer = repository.findById(id)
+                .orElseThrow(() -> new CustomerNotFoundException(id)); // 改成拋出自定義異常
 
-        Customer customer = customerOpt.get();
         customer.setName(name);
         Customer updated = repository.save(customer);
-
         return new CustomerResponse(updated.getId(), updated.getName());
     }
 

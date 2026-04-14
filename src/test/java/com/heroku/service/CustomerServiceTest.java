@@ -2,7 +2,6 @@ package com.heroku.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.argThat;
@@ -22,6 +21,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.heroku.dto.CustomerResponse;
+import com.heroku.exception.CustomerNotFoundException;
 import com.heroku.model.Customer;
 import com.heroku.repository.CustomerRepository;
 
@@ -128,22 +128,6 @@ class CustomerServiceTest {
     }
 
     @Test
-    @DisplayName("讀取客戶：當 ID 不存在時，應回傳 null (或拋出異常)")
-    void readCustomer_ShouldReturnNull_WhenIdDoesNotExist() {
-        // Arrange
-        Long customerId = 99L;
-        // 模擬資料庫找不到資料
-        when(repository.findById(customerId)).thenReturn(Optional.empty());
-
-        // Act
-        CustomerResponse result = customerService.readCustomer(customerId);
-
-        // Assert
-        assertNull(result);
-        verify(repository, times(1)).findById(customerId);
-    }
-
-    @Test
     @DisplayName("更新客戶：當 ID 存在時，應更新並回傳新的客戶資料")
     void updateCustomer_ShouldReturnUpdatedCustomer_WhenIdExists() {
         // Arrange
@@ -196,5 +180,33 @@ class CustomerServiceTest {
         customerService.deleteCustomer(customerId);
         // Assert
         verify(repository, times(1)).deleteById(customerId);
+    }
+
+    @Test
+    @DisplayName("讀取客戶：當 ID 不存在時，應拋出 CustomerNotFoundException")
+    void readCustomer_ShouldThrowNotFound_WhenIdDoesNotExist() {
+        // Arrange
+        Long customerId = 99L;
+        when(repository.findById(customerId)).thenReturn(Optional.empty());
+
+        // Act & Assert
+        assertThrows(CustomerNotFoundException.class, () -> {
+            customerService.readCustomer(customerId);
+        });
+    }
+
+    @Test
+    @DisplayName("更新客戶：當 ID 不存在時，應拋出 CustomerNotFoundException")
+    void updateCustomer_ShouldThrowNotFound_WhenIdDoesNotExist() {
+        // Arrange
+        Long customerId = 99L;
+        when(repository.findById(customerId)).thenReturn(Optional.empty());
+
+        // Act & Assert
+        assertThrows(CustomerNotFoundException.class, () -> {
+            customerService.updateCustomer(customerId, "New Name");
+        });
+
+        verify(repository, never()).save(any());
     }
 }
