@@ -1,6 +1,6 @@
 package com.heroku.controller;
 
-import static org.mockito.Mockito.when;
+
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,16 +9,18 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.heroku.advice.GlobalExceptionHandler;
 import com.heroku.dto.CustomerResponse;
 import com.heroku.repository.CustomerRepository;
 import com.heroku.service.CustomerService;
 
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
-@WebMvcTest(CustomerController.class)
+@WebMvcTest({ CustomerController.class, GlobalExceptionHandler.class }) // 加上這行
 class CustomerControllerTest {
-
   @Autowired
   private MockMvc mockMvc; // 這是 Web 測試的核心，用來模擬 HTTP 請求
 
@@ -46,5 +48,20 @@ class CustomerControllerTest {
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.id").value(customerId))
         .andExpect(jsonPath("$.name").value(customerName));
+  }
+
+  @Test
+  void createCustomer_ShouldReturn400_WhenNameIsEmpty() throws Exception {
+    // Arrange
+    when(customerService.createCustomer(" ")).thenThrow(new IllegalArgumentException("Name cannot be empty"));
+
+    // Act & Assert
+    mockMvc.perform(post("/api/customers")
+        .contentType(MediaType.TEXT_PLAIN)
+        .content(" "))
+        .andDo(print()) // 💡 這行會印出詳細錯誤，幫你抓出 500 的真相
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.status").value(400))
+        .andExpect(jsonPath("$.message").value("Name cannot be empty"));
   }
 }

@@ -3,7 +3,6 @@ package com.heroku.controller;
 import com.heroku.dto.CustomerResponse;
 import com.heroku.service.CustomerService;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,10 +13,9 @@ import java.util.Optional;
 @CrossOrigin
 @RestController
 public class CustomerController {
-    @Autowired
     private final CustomerService service;
 
-    // constructor
+    // 不需 @Autowired，Spring 自動處理
     public CustomerController(CustomerService service) {
         this.service = service;
     }
