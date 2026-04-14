@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
@@ -85,5 +86,29 @@ class CustomerRepositoryTest {
     assertEquals(2, page.getContent().size());
     assertEquals("A", page.getContent().get(0).getName());
     assertEquals("B", page.getContent().get(1).getName());
+  }
+
+  @Test
+  @DisplayName("分頁搜尋：應根據關鍵字過濾並回傳排序後的指定頁面")
+  void testFindByNameContainingWithPagination() {
+    // Arrange: 準備測試數據
+    customerRepository.save(new Customer(null, "Apple"));
+    customerRepository.save(new Customer(null, "Apricot"));
+    customerRepository.save(new Customer(null, "Cherry"));
+    customerRepository.save(new Customer(null, "Avocado"));
+
+    // 建立分頁請求：每頁 2 筆，按名稱升序 (ASC)
+    // 第一頁 (index 0) 預期會拿到 Apple, Apricot
+    // 如果是搜尋 "A" 的話
+    Pageable pageable = PageRequest.of(0, 2, Sort.by("name").ascending());
+
+    // Act
+    Page<Customer> result = customerRepository.findByNameContainingIgnoreCase("A", pageable);
+
+    // Assert
+    assertEquals(3, result.getTotalElements()); // 總共有 3 個包含 'A' 的 (Apple, Apricot, Avocado)
+    assertEquals(2, result.getContent().size()); // 但這頁只有 2 筆
+    assertEquals("Apple", result.getContent().get(0).getName()); // 排序第一是 Apple
+    assertEquals("Apricot", result.getContent().get(1).getName()); // 排序第二是 Apricot
   }
 }

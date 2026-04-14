@@ -1,5 +1,7 @@
 package com.heroku.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -18,4 +20,8 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
     // 找出 ID 大於某值 且 名字包含某字串 的客戶
     List<Customer> findByIdGreaterThanAndNameContaining(Long id, String name);
+
+    // Spring 會自動解析 NameContaining 並結合 pageable 的分頁排序邏輯
+    Page<Customer> findByNameContainingIgnoreCase(String name, Pageable pageable);
+
 }
