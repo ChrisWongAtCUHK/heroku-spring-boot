@@ -31,7 +31,7 @@ public class CustomerService {
     public List<CustomerResponse> getCustomers(Optional<String> searchName) {
         List<CustomerResponse> customers = searchName
                 .map(repository::getContainingCustomer)
-                .orElse(repository.findAll())
+                .orElseGet(() -> repository.findAll())
                 .stream()
                 .map(c -> new CustomerResponse(c.getId(), c.getName()))
                 .toList();

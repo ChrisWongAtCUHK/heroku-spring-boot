@@ -10,6 +10,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -85,5 +86,25 @@ class CustomerServiceTest {
 
         // 驗證 repository.findAll() 確曾被調用過一次
         verify(repository, times(1)).findAll();
+    }
+
+    @Test
+    @DisplayName("獲取客戶：當提供搜尋姓名時，應調用搜尋方法")
+    void getCustomers_WithSearchName() {
+        // Arrange
+        String searchName = "Allen";
+        Customer customer = new Customer(1L, "Allen");
+        // 假設你的 repository 有這個自定義方法
+        when(repository.getContainingCustomer(searchName)).thenReturn(List.of(customer));
+
+        // Act
+        List<CustomerResponse> result = customerService.getCustomers(Optional.of(searchName));
+
+        // Assert
+        assertEquals(1, result.size());
+        assertEquals("Allen", result.get(0).name());
+        // 驗證是調用搜尋方法而不是 findAll
+        verify(repository, times(1)).getContainingCustomer(searchName);
+        verify(repository, never()).findAll();
     }
 }
