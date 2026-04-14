@@ -3,8 +3,10 @@ package com.heroku.repository;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.List;
 import java.util.Optional;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -31,5 +33,21 @@ class CustomerRepositoryTest {
 
     assertTrue(found.isPresent());
     assertEquals("H2 User", found.get().getName());
+  }
+
+  @Test
+  @DisplayName("模糊搜尋：應回傳名稱包含關鍵字的客戶（不分大小寫）")
+  void findByNameContaining_ShouldReturnMatchingCustomers() {
+    // Arrange
+    customerRepository.save(new Customer(null, "Allen Wang"));
+    customerRepository.save(new Customer(null, "Bob Alexander"));
+    customerRepository.save(new Customer(null, "Charlie"));
+
+    // Act
+    List<Customer> result = customerRepository.findByNameContainingIgnoreCase("AL");
+
+    // Assert
+    // 預期會找到 "Allen" 和 "Alexander"
+    assertEquals(2, result.size());
   }
 }

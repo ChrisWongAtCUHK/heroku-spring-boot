@@ -12,5 +12,7 @@ import java.util.List;
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
     @Query("SELECT c FROM Customer c WHERE c.name LIKE %?1%")
-    List<Customer> getContainingCustomer(String word);     // dont need to define method bc in repository
+    List<Customer> getContainingCustomer(String word); // dont need to define method bc in repository
+
+    List<Customer> findByNameContainingIgnoreCase(String name);
 }
