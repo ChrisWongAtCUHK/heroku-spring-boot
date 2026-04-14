@@ -9,42 +9,39 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.heroku.model.Customer;
+import com.heroku.dto.CustomerResponse;
 import com.heroku.repository.CustomerRepository;
 import com.heroku.service.CustomerService;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(CustomerController.class) // 只啟動 Web 層，不啟動資料庫
+@WebMvcTest(CustomerController.class)
 class CustomerControllerTest {
 
   @Autowired
-  private MockMvc mockMvc; // 模擬發送 HTTP 請求的工具
+  private MockMvc mockMvc; // 這是 Web 測試的核心，用來模擬 HTTP 請求
 
   @MockitoBean
-  private CustomerService customerService; // 模擬 Controller 依賴的 Service
+  private CustomerService customerService; // 必須用 @MockitoBean，Spring 才會把它塞進 Controller
 
-  // 如果 Controller 有用到 Repository，這裡也要 Mock，否則 Spring 啟動時會去尋找資料庫配置
   @MockitoBean
-  private CustomerRepository customerRepository;
+  private CustomerRepository customerRepository; // 如果 Controller 沒用到它，甚至可以不寫這行
 
   @Test
-  void shouldReturnCustomerWhenPost() throws Exception {
-    // 1. Arrange: 準備模擬資料
-    Customer mockCustomer = new Customer();
-    mockCustomer.setId(1L);
-    mockCustomer.setName("Allen");
+  void createCustomer_ShouldReturnJSON() throws Exception {
+    // 1. Arrange: 準備 DTO 回傳值 (因為 Service 被 Mock 了，它現在回傳 DTO)
+    CustomerResponse mockResponse = new CustomerResponse(1L, "Allen");
 
-    // 確保這裡的參數與 Controller 調用的參數一致
-    when(customerService.createCustomer("Allen")).thenReturn(mockCustomer);
+    // 注意：這裡 Mock 的是對象是 customerService，不是 repository
+    when(customerService.createCustomer("Allen")).thenReturn(mockResponse);
 
-    // 2. Act & Assert: 發送 POST 請求並驗證結果
+    // 2. Act & Assert: 使用 mockMvc 發送請求並檢查 JSON
     mockMvc.perform(post("/api/customers")
-        .contentType(MediaType.TEXT_PLAIN) // 這裡要對應 @RequestBody String
-        .content("Allen")) // 直接傳送字串內容
-        .andExpect(status().isOk()) // 驗證 HTTP 200
-        .andExpect(jsonPath("$.id").value(1)) // 驗證 JSON 內容
+        .contentType(MediaType.TEXT_PLAIN)
+        .content("Allen"))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.id").value(1))
         .andExpect(jsonPath("$.name").value("Allen"));
   }
 }

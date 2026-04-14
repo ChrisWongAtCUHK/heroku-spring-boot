@@ -1,5 +1,6 @@
 package com.heroku.controller;
 
+import com.heroku.dto.CustomerResponse;
 import com.heroku.model.Customer;
 import com.heroku.repository.CustomerRepository;
 import com.heroku.service.CustomerService;
@@ -49,7 +50,7 @@ public class CustomerController {
     }
 
     @PostMapping("/api/customers")
-    public ResponseEntity<Customer> createCustomer(@RequestBody String name) {
+    public ResponseEntity<CustomerResponse> createCustomer(@RequestBody String name) {
         return ResponseEntity.ok(customerService.createCustomer(name));
     }
 

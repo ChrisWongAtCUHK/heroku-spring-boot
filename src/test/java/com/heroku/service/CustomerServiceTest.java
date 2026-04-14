@@ -16,6 +16,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.heroku.dto.CustomerResponse;
 import com.heroku.model.Customer;
 import com.heroku.repository.CustomerRepository;
 
@@ -40,11 +41,11 @@ class CustomerServiceTest {
         when(customerRepository.save(any(Customer.class))).thenReturn(savedCustomer);
 
         // 2. Act (執行受測方法)
-        Customer result = customerService.createCustomer(inputName);
+        CustomerResponse result = customerService.createCustomer(inputName);
 
         // 3. Assert (斷言結果)
-        assertNotNull(result.getId(), "ID 不應為空");
-        assertEquals("Allen", result.getName());
+        assertNotNull(result.id(), "ID 不應為空");
+        assertEquals("Allen", result.name());
         
         // 驗證 repository.save() 確曾被調用過一次
         verify(customerRepository, times(1)).save(any(Customer.class));
