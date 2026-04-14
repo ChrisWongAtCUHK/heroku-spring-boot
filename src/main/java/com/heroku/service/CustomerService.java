@@ -16,7 +16,7 @@ public class CustomerService {
     private CustomerRepository repository;
 
     public CustomerResponse createCustomer(String name) {
-        if (name == null || name.isEmpty()) {
+        if (name == null || name.isBlank()) {
             throw new IllegalArgumentException("Name cannot be empty");
         }
 

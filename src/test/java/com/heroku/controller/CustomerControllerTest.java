@@ -59,4 +59,16 @@ class CustomerControllerTest {
         .andExpect(status().isBadRequest())
         .andExpect(jsonPath("$.message").value("請求主體不能為空")); // 完全沒有 Body
   }
+
+  @Test
+  void createCustomer_ShouldReturn400_WhenNameIsBlank() throws Exception {
+    // Arrange
+    when(customerService.createCustomer(" ")).thenThrow(new IllegalArgumentException("Name cannot be empty"));
+
+    mockMvc.perform(post("/api/customers")
+        .contentType(MediaType.TEXT_PLAIN)
+        .content(" ")) // 現在 isBlank() 會抓到這個空格了
+        .andExpect(status().isBadRequest()) // 現在會拿到 400 了
+        .andExpect(jsonPath("$.message").value("Name cannot be empty"));
+  }
 }
