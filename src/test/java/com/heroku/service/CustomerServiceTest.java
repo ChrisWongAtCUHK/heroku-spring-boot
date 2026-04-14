@@ -9,6 +9,8 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.List;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,7 +25,7 @@ import com.heroku.repository.CustomerRepository;
 @ExtendWith(MockitoExtension.class) // 使用 Mockito 擴展
 class CustomerServiceTest {
     @Mock
-    private CustomerRepository customerRepository; // 模擬數據庫訪問
+    private CustomerRepository repository; // 模擬數據庫訪問
 
     @InjectMocks
     private CustomerService customerService; // 將 Mock 注入 Service
@@ -38,7 +40,7 @@ class CustomerServiceTest {
         savedCustomer.setName(inputName);
 
         // 當調用 save 時，不論傳入什麼 Customer 物件，都回傳我們準備好的 savedCustomer
-        when(customerRepository.save(any(Customer.class))).thenReturn(savedCustomer);
+        when(repository.save(any(Customer.class))).thenReturn(savedCustomer);
 
         // 2. Act (執行受測方法)
         CustomerResponse result = customerService.createCustomer(inputName);
@@ -46,9 +48,9 @@ class CustomerServiceTest {
         // 3. Assert (斷言結果)
         assertNotNull(result.id(), "ID 不應為空");
         assertEquals("Allen", result.name());
-        
+
         // 驗證 repository.save() 確曾被調用過一次
-        verify(customerRepository, times(1)).save(any(Customer.class));
+        verify(repository, times(1)).save(any(Customer.class));
     }
 
     @Test
@@ -58,9 +60,30 @@ class CustomerServiceTest {
         assertThrows(IllegalArgumentException.class, () -> {
             customerService.createCustomer("");
         });
-        
+
         // 驗證數據庫 save 方法「從未」被調用（保證邏輯正確截斷）
-        verify(customerRepository, never()).save(any());
+        verify(repository, never()).save(any());
+    }
+
+    @Test
+    @DisplayName("獲取客戶：當搜尋姓名為空時，應回傳所有客戶")
+    void getCustomers() {
+        // 1. Arrange (準備資料與模擬行為)
+        // 假設有全參數建構子
+        List<Customer> mockCustomers = List.of(
+                new Customer(1L, "Allen"),
+                new Customer(2L, "Bob"));
+        when(repository.findAll()).thenReturn(mockCustomers);
+
+        // 2. Act (執行受測方法)
+        List<CustomerResponse> result = customerService.getCustomers(java.util.Optional.empty());
+
+        // 3. Assert (斷言結果)
+        assertEquals(2, result.size());
+        assertEquals("Allen", result.get(0).name());
+        assertEquals("Bob", result.get(1).name());
+
+        // 驗證 repository.findAll() 確曾被調用過一次
+        verify(repository, times(1)).findAll();
     }
 }
-
