@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -140,5 +141,32 @@ class CustomerServiceTest {
         // Assert
         assertNull(result);
         verify(repository, times(1)).findById(customerId);
+    }
+
+    @Test
+    @DisplayName("更新客戶：當 ID 存在時，應更新並回傳新的客戶資料")
+    void updateCustomer_ShouldReturnUpdatedCustomer_WhenIdExists() {
+        // Arrange
+        Long customerId = 1L;
+        String newName = "Allen Updated";
+        Customer existingCustomer = new Customer(customerId, "Allen");
+        Customer updatedCustomer = new Customer(customerId, newName);
+
+        when(repository.findById(customerId)).thenReturn(Optional.of(existingCustomer));
+        when(repository.save(any(Customer.class))).thenReturn(updatedCustomer);
+
+        // Act
+        CustomerResponse result = customerService.updateCustomer(customerId, newName);
+        // Assert
+        assertNotNull(result);
+        assertEquals(customerId, result.id());
+        assertEquals(newName, result.name());
+
+        // 驗證 findById 被呼叫
+        verify(repository, times(1)).findById(customerId);
+
+        // 驗證 save 被呼叫，且傳入的 Customer 物件名字已經改好了
+        verify(repository)
+                .save(argThat(customer -> customer.getName().equals(newName) && customer.getId().equals(customerId)));
     }
 }
