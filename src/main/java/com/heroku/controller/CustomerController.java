@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:5173") // 允許 React 的通訊埠
 @RestController
 public class CustomerController {
     private final CustomerService service;
