@@ -2,6 +2,7 @@ package com.heroku.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
@@ -122,6 +123,22 @@ class CustomerServiceTest {
         assertNotNull(result);
         assertEquals(customerId, result.id());
         assertEquals("Allen", result.name());
+        verify(repository, times(1)).findById(customerId);
+    }
+
+    @Test
+    @DisplayName("讀取客戶：當 ID 不存在時，應回傳 null (或拋出異常)")
+    void readCustomer_ShouldReturnNull_WhenIdDoesNotExist() {
+        // Arrange
+        Long customerId = 99L;
+        // 模擬資料庫找不到資料
+        when(repository.findById(customerId)).thenReturn(Optional.empty());
+
+        // Act
+        CustomerResponse result = customerService.readCustomer(customerId);
+
+        // Assert
+        assertNull(result);
         verify(repository, times(1)).findById(customerId);
     }
 }
