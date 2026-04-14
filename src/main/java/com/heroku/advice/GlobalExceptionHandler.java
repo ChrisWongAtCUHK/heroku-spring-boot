@@ -2,6 +2,7 @@ package com.heroku.advice;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -25,5 +26,12 @@ public class GlobalExceptionHandler {
         HttpStatus.INTERNAL_SERVER_ERROR.value(), // 500
         "伺服器發生未知錯誤");
     return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+  }
+
+  @ExceptionHandler(org.springframework.http.converter.HttpMessageNotReadableException.class)
+  public ResponseEntity<ErrorResponse> handleMissingBody(HttpMessageNotReadableException ex) {
+    return new ResponseEntity<>(
+        new ErrorResponse(400, "請求主體不能為空"),
+        HttpStatus.BAD_REQUEST);
   }
 }

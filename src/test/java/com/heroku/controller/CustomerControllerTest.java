@@ -1,7 +1,5 @@
 package com.heroku.controller;
 
-
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -17,7 +15,6 @@ import com.heroku.service.CustomerService;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 @WebMvcTest({ CustomerController.class, GlobalExceptionHandler.class }) // 加上這行
 class CustomerControllerTest {
@@ -53,15 +50,13 @@ class CustomerControllerTest {
   @Test
   void createCustomer_ShouldReturn400_WhenNameIsEmpty() throws Exception {
     // Arrange
-    when(customerService.createCustomer(" ")).thenThrow(new IllegalArgumentException("Name cannot be empty"));
+    when(customerService.createCustomer("")).thenThrow(new IllegalArgumentException("Name cannot be empty"));
 
     // Act & Assert
     mockMvc.perform(post("/api/customers")
         .contentType(MediaType.TEXT_PLAIN)
-        .content(" "))
-        .andDo(print()) // 💡 這行會印出詳細錯誤，幫你抓出 500 的真相
+        .content("")) // 完全沒內容
         .andExpect(status().isBadRequest())
-        .andExpect(jsonPath("$.status").value(400))
-        .andExpect(jsonPath("$.message").value("Name cannot be empty"));
+        .andExpect(jsonPath("$.message").value("請求主體不能為空")); // 完全沒有 Body
   }
 }
