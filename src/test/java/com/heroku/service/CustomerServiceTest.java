@@ -174,12 +174,19 @@ class CustomerServiceTest {
     @Test
     @DisplayName("刪除客戶：應調用 repository 的 deleteById 方法")
     void deleteCustomer_ShouldCallRepositoryDelete() {
-        // Arrange
+        // 1. Arrange
         Long customerId = 1L;
-        // Act
+        Customer customer = new Customer(customerId, "Allen");
+
+        // 關鍵：模擬「找得到人」，這樣才不會噴 NotFoundException
+        when(repository.findById(customerId)).thenReturn(Optional.of(customer));
+
+        // 2. Act
         customerService.deleteCustomer(customerId);
-        // Assert
-        verify(repository, times(1)).deleteById(customerId);
+
+        // 3. Assert
+        verify(repository, times(1)).findById(customerId); // 驗證有先檢查
+        verify(repository, times(1)).deleteById(customerId); // 驗證有執行刪除
     }
 
     @Test
