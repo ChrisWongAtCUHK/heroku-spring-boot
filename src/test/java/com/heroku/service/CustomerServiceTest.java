@@ -174,19 +174,15 @@ class CustomerServiceTest {
     @Test
     @DisplayName("刪除客戶：應調用 repository 的 deleteById 方法")
     void deleteCustomer_ShouldCallRepositoryDelete() {
-        // 1. Arrange
         Long customerId = 1L;
         Customer customer = new Customer(customerId, "Allen");
 
-        // 關鍵：模擬「找得到人」，這樣才不會噴 NotFoundException
+        // 這次 Service 呼叫的是 findById，所以這個 Mock 會成功匹配！
         when(repository.findById(customerId)).thenReturn(Optional.of(customer));
 
-        // 2. Act
         customerService.deleteCustomer(customerId);
 
-        // 3. Assert
-        verify(repository, times(1)).findById(customerId); // 驗證有先檢查
-        verify(repository, times(1)).deleteById(customerId); // 驗證有執行刪除
+        verify(repository).delete(customer);
     }
 
     @Test

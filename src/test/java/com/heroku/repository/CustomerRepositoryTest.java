@@ -31,6 +31,5 @@ class CustomerRepositoryTest {
 
     assertTrue(found.isPresent());
     assertEquals("H2 User", found.get().getName());
-    System.out.println("成功在 H2 中找到 ID: " + found.get().getId());
   }
 }

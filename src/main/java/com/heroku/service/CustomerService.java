@@ -3,7 +3,6 @@ package com.heroku.service;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.heroku.dto.CustomerResponse;
@@ -13,8 +12,12 @@ import com.heroku.repository.CustomerRepository;
 
 @Service
 public class CustomerService {
-    @Autowired
     private CustomerRepository repository;
+
+    // 刪除 @Autowired，改用建構子
+    public CustomerService(CustomerRepository repository) {
+        this.repository = repository;
+    }
 
     public CustomerResponse createCustomer(String name) {
         if (name == null || name.isBlank()) {
@@ -57,9 +60,11 @@ public class CustomerService {
     }
 
     public void deleteCustomer(Long id) {
-        if (!repository.existsById(id)) {
-            throw new CustomerNotFoundException(id);
-        }
-        repository.deleteById(id);
+        // 1. 嘗試找出該客戶，找不到直接噴 404 (CustomerNotFoundException)
+        Customer customer = repository.findById(id)
+                .orElseThrow(() -> new CustomerNotFoundException(id));
+
+        // 2. 執行刪除
+        repository.delete(customer); // 或者 repository.deleteById(id);
     }
 }
