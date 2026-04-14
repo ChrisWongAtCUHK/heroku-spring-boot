@@ -30,18 +30,21 @@ class CustomerControllerTest {
 
   @Test
   void createCustomer_ShouldReturnJSON() throws Exception {
+    final long customerId = 1L;
+    final String customerName = "Allen";
+
     // 1. Arrange: 準備 DTO 回傳值 (因為 Service 被 Mock 了，它現在回傳 DTO)
-    CustomerResponse mockResponse = new CustomerResponse(1L, "Allen");
+    CustomerResponse mockResponse = new CustomerResponse(customerId, customerName);
 
     // 注意：這裡 Mock 的是對象是 customerService，不是 repository
-    when(customerService.createCustomer("Allen")).thenReturn(mockResponse);
+    when(customerService.createCustomer(customerName)).thenReturn(mockResponse);
 
     // 2. Act & Assert: 使用 mockMvc 發送請求並檢查 JSON
     mockMvc.perform(post("/api/customers")
         .contentType(MediaType.TEXT_PLAIN)
-        .content("Allen"))
+        .content(customerName))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.id").value(1))
-        .andExpect(jsonPath("$.name").value("Allen"));
+        .andExpect(jsonPath("$.id").value(customerId))
+        .andExpect(jsonPath("$.name").value(customerName));
   }
 }
