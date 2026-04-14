@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.heroku.dto.CustomerResponse;
+import com.heroku.exception.CustomerNotFoundException;
 import com.heroku.model.Customer;
 import com.heroku.repository.CustomerRepository;
 
@@ -41,7 +42,8 @@ public class CustomerService {
 
     public CustomerResponse readCustomer(Long id) {
         Optional<Customer> customerOpt = repository.findById(id);
-        return customerOpt.map(c -> new CustomerResponse(c.getId(), c.getName())).orElse(null);
+        return customerOpt.map(c -> new CustomerResponse(c.getId(), c.getName()))
+                .orElseThrow(() -> new CustomerNotFoundException(id));
     }
 
     public CustomerResponse updateCustomer(Long id, String name) {
@@ -58,6 +60,9 @@ public class CustomerService {
     }
 
     public void deleteCustomer(Long id) {
+        if (!repository.existsById(id)) {
+            throw new CustomerNotFoundException(id);
+        }
         repository.deleteById(id);
     }
 }

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.heroku.dto.ErrorResponse;
+import com.heroku.exception.CustomerNotFoundException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -33,5 +34,13 @@ public class GlobalExceptionHandler {
     return new ResponseEntity<>(
         new ErrorResponse(400, "請求主體不能為空"),
         HttpStatus.BAD_REQUEST);
+  }
+
+  @ExceptionHandler(CustomerNotFoundException.class)
+  public ResponseEntity<ErrorResponse> handleCustomerNotFound(CustomerNotFoundException ex) {
+    ErrorResponse error = new ErrorResponse(
+        HttpStatus.NOT_FOUND.value(), // 404
+        ex.getMessage());
+    return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
   }
 }
