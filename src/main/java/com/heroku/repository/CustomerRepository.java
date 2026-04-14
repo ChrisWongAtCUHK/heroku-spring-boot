@@ -15,4 +15,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
     List<Customer> getContainingCustomer(String word); // dont need to define method bc in repository
 
     List<Customer> findByNameContainingIgnoreCase(String name);
+
+    // 找出 ID 大於某值 且 名字包含某字串 的客戶
+    List<Customer> findByIdGreaterThanAndNameContaining(Long id, String name);
 }

@@ -50,4 +50,19 @@ class CustomerRepositoryTest {
     // 預期會找到 "Allen" 和 "Alexander"
     assertEquals(2, result.size());
   }
+
+  @Test
+  @DisplayName("複合查詢：應根據 ID 範圍與姓名關鍵字過濾資料")
+  void testComplexQuery() {
+    // Arrange
+    customerRepository.save(new Customer(null, "Allen"));
+    customerRepository.save(new Customer(null, "Alex"));
+    customerRepository.save(new Customer(null, "Bob"));
+
+    // Act: 找 ID > 0 且名字包含 "Al" 的人
+    List<Customer> result = customerRepository.findByIdGreaterThanAndNameContaining(0L, "Al");
+
+    // Assert
+    assertEquals(2, result.size()); // 應該只有 Allen 和 Alex
+  }
 }
