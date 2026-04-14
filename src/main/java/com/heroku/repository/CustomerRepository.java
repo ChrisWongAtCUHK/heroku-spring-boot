@@ -24,4 +24,6 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
     // Spring 會自動解析 NameContaining 並結合 pageable 的分頁排序邏輯
     Page<Customer> findByNameContainingIgnoreCase(String name, Pageable pageable);
 
+    // 搜尋開頭為指定字串的客戶，並支援分頁
+    Page<Customer> findByNameStartingWith(String prefix, Pageable pageable);
 }

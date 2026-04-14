@@ -111,4 +111,22 @@ class CustomerRepositoryTest {
     assertEquals("Apple", result.getContent().get(0).getName()); // 排序第一是 Apple
     assertEquals("Apricot", result.getContent().get(1).getName()); // 排序第二是 Apricot
   }
+
+  @Test
+  @DisplayName("前綴搜尋：應只回傳名稱開頭匹配的資料")
+  void testFindByNameStartingWith() {
+    // Arrange
+    customerRepository.save(new Customer(null, "Apple")); // 匹配
+    customerRepository.save(new Customer(null, "Apricot")); // 匹配
+    customerRepository.save(new Customer(null, "Banana")); // 不匹配 (a 不在開頭)
+    customerRepository.save(new Customer(null, "Cherry")); // 不匹配
+
+    Pageable pageable = PageRequest.of(0, 10); // 拿第 0 頁，每頁 10 筆
+
+    // Act
+    Page<Customer> result = customerRepository.findByNameStartingWith("A", pageable);
+
+    // Assert
+    assertEquals(2, result.getTotalElements()); // 只有 Apple 和 Apricot
+  }
 }
