@@ -2,7 +2,9 @@ package com.heroku.controller;
 
 import com.heroku.model.Customer;
 import com.heroku.repository.CustomerRepository;
+import com.heroku.service.CustomerService;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -16,12 +18,16 @@ import java.util.Optional;
 @CrossOrigin
 @RestController
 public class CustomerController {
+    @Autowired
+    private final CustomerService customerService;
+    private final CustomerRepository customerRepository;
+
     // constructor
-    public CustomerController(CustomerRepository customerRepository) {
+    public CustomerController(CustomerService customerService, CustomerRepository customerRepository) {
+        this.customerService = customerService;
         this.customerRepository = customerRepository;
     }
 
-    private final CustomerRepository customerRepository;
 
     @RequestMapping(value = "/api/customers", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody List<Customer> getCustomers(@RequestParam("name") Optional<String> searchName) {
@@ -43,10 +49,8 @@ public class CustomerController {
     }
 
     @PostMapping("/api/customers")
-    public Customer addCustomer(@RequestBody String name) {
-        Customer customer = new Customer();
-        customer.setName(name);
-        return customerRepository.save(customer);
+    public ResponseEntity<Customer> createCustomer(@RequestBody String name) {
+        return ResponseEntity.ok(customerService.createCustomer(name));
     }
 
     @PutMapping("/api/customers/{id}")
