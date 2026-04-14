@@ -1,8 +1,9 @@
 package com.heroku.service;
 
-import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.heroku.dto.CustomerResponse;
@@ -32,13 +33,11 @@ public class CustomerService {
         return new CustomerResponse(saved.getId(), saved.getName());
     }
 
-    public List<CustomerResponse> getCustomers(Optional<String> searchName) {
-        List<CustomerResponse> customers = searchName
-                .map(repository::getContainingCustomer)
-                .orElseGet(() -> repository.findAll())
-                .stream()
-                .map(c -> new CustomerResponse(c.getId(), c.getName()))
-                .toList();
+    public Page<CustomerResponse> getCustomers(Optional<String> searchName, Pageable pageable) {
+        Page<CustomerResponse> customers = searchName
+                .map(name -> repository.findByNameContainingIgnoreCase(name, pageable)) // 如果有 searchName 就用模糊搜尋
+                .orElseGet(() -> repository.findAll(pageable))
+                .map(customer -> new CustomerResponse(customer.getId(), customer.getName()));
 
         return customers;
     }

@@ -3,11 +3,12 @@ package com.heroku.controller;
 import com.heroku.dto.CustomerResponse;
 import com.heroku.service.CustomerService;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @CrossOrigin
@@ -21,8 +22,8 @@ public class CustomerController {
     }
 
     @RequestMapping(value = "/api/customers", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<CustomerResponse>> getCustomers(@RequestParam("name") Optional<String> searchName) {
-        List<CustomerResponse> response = service.getCustomers(searchName);
+    public ResponseEntity<Page<CustomerResponse>> getCustomers(@RequestParam("name") Optional<String> searchName, Pageable pageable) {
+        Page<CustomerResponse> response = service.getCustomers(searchName, pageable);
 
         return ResponseEntity.ok(response);
     }

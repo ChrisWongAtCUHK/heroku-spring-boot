@@ -19,6 +19,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 
 import com.heroku.dto.CustomerResponse;
 import com.heroku.exception.CustomerNotFoundException;
@@ -69,25 +74,29 @@ class CustomerServiceTest {
     }
 
     @Test
-    @DisplayName("獲取客戶：當搜尋姓名為空時，應回傳所有客戶")
+    @DisplayName("獲取客戶：當搜尋姓名為空時，應回傳分頁後的第一頁客戶")
     void getCustomers() {
-        // 1. Arrange (準備資料與模擬行為)
-        // 假設有全參數建構子
-        List<Customer> mockCustomers = List.of(
-                new Customer(1L, "Allen"),
-                new Customer(2L, "Bob"));
-        when(repository.findAll()).thenReturn(mockCustomers);
+        // 預期每頁 2 筆
+        Pageable pageable = PageRequest.of(0, 2, Sort.by("name").ascending());
 
-        // 2. Act (執行受測方法)
-        List<CustomerResponse> result = customerService.getCustomers(java.util.Optional.empty());
+        // 1. Arrange
+        // 💡 關鍵：這裡只放該分頁「實際上」會拿到的 2 筆資料
+        List<Customer> customerList = List.of(
+                new Customer(1L, "Apple"),
+                new Customer(2L, "Apricot"));
 
-        // 3. Assert (斷言結果)
-        assertEquals(2, result.size());
-        assertEquals("Allen", result.get(0).name());
-        assertEquals("Bob", result.get(1).name());
+        // PageImpl(當前頁資料, 分頁請求, 總筆數)
+        Page<Customer> mockPage = new PageImpl<>(customerList, pageable, 4);
 
-        // 驗證 repository.findAll() 確曾被調用過一次
-        verify(repository, times(1)).findAll();
+        when(repository.findAll(pageable)).thenReturn(mockPage);
+
+        // 2. Act
+        Page<CustomerResponse> result = customerService.getCustomers(Optional.empty(), pageable);
+
+        // 3. Assert
+        assertEquals(2, result.getContent().size(), "當前頁面應只有 2 筆");
+        assertEquals(4, result.getTotalElements(), "總筆數應為 4 筆");
+        assertEquals(2, result.getTotalPages(), "總頁數應為 2 頁 (4/2)");
     }
 
     @Test
@@ -99,12 +108,14 @@ class CustomerServiceTest {
         // 假設你的 repository 有這個自定義方法
         when(repository.getContainingCustomer(searchName)).thenReturn(List.of(customer));
 
+        Pageable pageable = PageRequest.of(0, 2, Sort.by("name").ascending());
+
         // Act
-        List<CustomerResponse> result = customerService.getCustomers(Optional.of(searchName));
+        Page<CustomerResponse> result = customerService.getCustomers(Optional.of(searchName), pageable);
 
         // Assert
-        assertEquals(1, result.size());
-        assertEquals("Allen", result.get(0).name());
+        assertEquals(1, result.getTotalElements());
+        assertEquals("Allen", result.getContent().get(0).name());
         // 驗證是調用搜尋方法而不是 findAll
         verify(repository, times(1)).getContainingCustomer(searchName);
         verify(repository, never()).findAll();
