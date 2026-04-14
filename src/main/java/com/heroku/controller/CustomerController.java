@@ -32,8 +32,9 @@ public class CustomerController {
     @GetMapping("/api/customers/{id}")
     public ResponseEntity<CustomerResponse> readCustomer(@PathVariable("id") Long id) {
         CustomerResponse response = service.readCustomer(id);
-
-        return ResponseEntity.ok(response);
+        return (response != null)
+                ? ResponseEntity.ok(response)
+                : ResponseEntity.notFound().build(); // 回傳 404
     }
 
     @PostMapping("/api/customers")
