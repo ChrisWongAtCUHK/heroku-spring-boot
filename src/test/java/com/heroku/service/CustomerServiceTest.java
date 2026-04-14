@@ -107,4 +107,21 @@ class CustomerServiceTest {
         verify(repository, times(1)).getContainingCustomer(searchName);
         verify(repository, never()).findAll();
     }
+
+    @Test
+    @DisplayName("讀取客戶：當 ID 存在時，應回傳對應客戶資料")
+    void readCustomer_ShouldReturnCustomer_WhenIdExists() {
+        // Arrange
+        Long customerId = 1L;
+        Customer customer = new Customer(customerId, "Allen");
+        when(repository.findById(customerId)).thenReturn(Optional.of(customer));
+
+        // Act
+        CustomerResponse result = customerService.readCustomer(customerId);
+        // Assert
+        assertNotNull(result);
+        assertEquals(customerId, result.id());
+        assertEquals("Allen", result.name());
+        verify(repository, times(1)).findById(customerId);
+    }
 }
