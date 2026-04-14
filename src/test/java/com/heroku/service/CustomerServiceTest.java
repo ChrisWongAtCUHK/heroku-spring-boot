@@ -186,4 +186,15 @@ class CustomerServiceTest {
         // 驗證既然找不到人，就絕對不應該呼叫 save
         verify(repository, never()).save(any());
     }
+
+    @Test
+    @DisplayName("刪除客戶：應調用 repository 的 deleteById 方法")
+    void deleteCustomer_ShouldCallRepositoryDelete() {
+        // Arrange
+        Long customerId = 1L;
+        // Act
+        customerService.deleteCustomer(customerId);
+        // Assert
+        verify(repository, times(1)).deleteById(customerId);
+    }
 }
