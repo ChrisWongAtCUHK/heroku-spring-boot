@@ -155,18 +155,18 @@ class CustomerServiceTest {
     }
 
     @Test
-    @DisplayName("更新客戶：當 ID 不存在時，應拋出 IllegalArgumentException")
+    @DisplayName("更新客戶：當 ID 不存在時，應拋出 CustomerNotFoundException")
     void updateCustomer_ShouldThrowException_WhenIdDoesNotExist() {
         // Arrange
         Long customerId = 99L;
         when(repository.findById(customerId)).thenReturn(Optional.empty());
 
         // Act & Assert
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+        CustomerNotFoundException exception = assertThrows(CustomerNotFoundException.class, () -> {
             customerService.updateCustomer(customerId, "Some Name");
         });
 
-        assertEquals("Customer not found", exception.getMessage());
+        assertEquals("找不到 ID 為 " + customerId + " 的客戶", exception.getMessage());
         // 驗證既然找不到人，就絕對不應該呼叫 save
         verify(repository, never()).save(any());
     }
