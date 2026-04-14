@@ -100,6 +100,34 @@ class CustomerServiceTest {
     }
 
     @Test
+    @DisplayName("獲取客戶：讀取第二頁時，應回傳剩餘的客戶資料")
+    void getCustomers_PageOne() {
+        // 1. Arrange: 每頁 2 筆，讀取第 1 頁 (即第二頁，Index 從 0 開始)
+        Pageable pageable = PageRequest.of(1, 2, Sort.by("name").ascending());
+
+        // 模擬第二頁只有 1 筆資料 (因為總共 3 筆，第一頁拿走 2 筆)
+        List<Customer> secondPageList = List.of(
+                new Customer(3L, "Cherry"));
+
+        // PageImpl(當前頁資料, 分頁請求, 總筆數)
+        Page<Customer> mockPage = new PageImpl<>(secondPageList, pageable, 3);
+
+        when(repository.findAll(pageable)).thenReturn(mockPage);
+
+        // 2. Act
+        Page<CustomerResponse> result = customerService.getCustomers(Optional.empty(), pageable);
+
+        // 3. Assert
+        assertEquals(1, result.getContent().size(), "第二頁應只有 1 筆資料");
+        assertEquals(3, result.getTotalElements(), "總筆數應為 3");
+        assertEquals(2, result.getTotalPages(), "總頁數應為 2");
+        assertEquals("Cherry", result.getContent().get(0).name());
+
+        // 驗證是否正確傳遞了分頁參數
+        verify(repository).findAll(pageable);
+    }
+
+    @Test
     @DisplayName("獲取客戶：當提供搜尋姓名時，應調用搜尋方法")
     void getCustomers_WithSearchName() {
         // Arrange
